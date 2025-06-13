@@ -330,8 +330,101 @@ jobs:
 - Consulta la guía oficial de Salesforce DX para CI/CD[3].
 - Explora ejemplos y plantillas en la comunidad Salesforce[1][2][7][8].
 
+---
+¿Dudas o sugerencias? ¡Abre un issue o contribuye con mejoras!
+
 
 
 ---
+---
 
-¿Dudas o sugerencias? ¡Abre un issue o contribuye con mejoras!
+Aquí tienes de dónde sacar la información para cada valor que te pide GitHub Actions Secrets para tu pipeline de Salesforce CI/CD, y una referencia rápida de dónde encontrar cada uno:
+
+1. SF_CLIENT_ID
+¿Qué es?
+El Consumer Key de tu Connected App en Salesforce.
+
+¿Dónde lo obtienes?
+
+Ve a Salesforce Setup > App Manager > busca tu Connected App > haz clic en "View" > copia el valor de Consumer Key.
+
+2. SF_USERNAME
+¿Qué es?
+El usuario de Salesforce que usas para autenticarte (por ejemplo, tuusuario@empresa.com).
+
+¿Dónde lo obtienes?
+
+Es tu username de Salesforce, el mismo que usas para iniciar sesión en la plataforma y que asociaste a la Connected App.
+
+3. SF_JWT_KEY
+¿Qué es?
+El contenido completo del archivo server.key (clave privada RSA que generaste).
+
+¿Dónde lo obtienes?
+
+Lo generaste con OpenSSL al crear el flujo JWT (el archivo suele estar en tu máquina local, por ejemplo en ~/.ssh/jwt/server.key).
+
+Abre el archivo con un editor de texto, copia TODO su contenido (incluyendo las líneas de inicio y fin) y pégalo en el secret.
+
+4. SF_INSTANCE_URL
+¿Qué es?
+La URL de login de Salesforce.
+
+¿Dónde lo obtienes?
+
+Usualmente es https://login.salesforce.com para la mayoría de las Developer Orgs y entornos de producción estándar.
+
+Solo cambia si tu empresa usa un entorno de Salesforce Sandbox (https://test.salesforce.com).
+
+
+git add .
+git commit -m "Prueba de pipeline CI/CD"
+git push origin main
+
+O crea una rama y abre un Pull Request si tu flujo lo requiere.
+
+3. **Verifica la ejecución en GitHub Actions**
+- Ve a la pestaña **Actions** de tu repositorio en GitHub.
+- Busca la ejecución más reciente del workflow.
+- Haz clic para ver los detalles y logs de cada paso.
+
+4. **Revisa los resultados**
+- Si todo está correcto, los pasos aparecerán en verde (“success”).
+- Si hay errores, revisa el mensaje y corrige según el log.
+
+---
+
+## 📋 Referencia rápida: ¿De dónde saco cada valor?
+
+- **SF_CLIENT_ID:**  
+`Setup > App Manager > [tu Connected App] > View > Consumer Key`
+
+- **SF_USERNAME:**  
+Usuario/login de Salesforce (ejemplo: `tuusuario@empresa.com`)
+
+- **SF_JWT_KEY:**  
+Contenido del archivo `server.key` generado con OpenSSL (copia todo, incluidas las líneas de inicio y fin)
+
+- **SF_INSTANCE_URL:**  
+Generalmente `https://login.salesforce.com`  
+(Si usas sandbox: `https://test.salesforce.com`)
+
+---
+
+## 🌐 Enlace de referencia a tu org Salesforce
+
+[Acceso a tu Salesforce Developer Org](https://xaviicode-dev-ed.develop.lightning.force.com/lightning/setup/SetupOneHome/home)
+
+---
+
+## 📝 Notas
+
+- No subas nunca tus secrets ni archivos sensibles al repositorio.
+- Puedes iterar y mejorar el pipeline agregando más pasos de pruebas, validaciones o despliegues a otros entornos.
+- Si tienes errores en el pipeline, revisa los logs detallados en la pestaña **Actions** y ajusta la configuración según sea necesario.
+
+---
+
+¡Listo! Ahora puedes empezar a trabajar y validar tu pipeline de CI/CD en Salesforce con GitHub Actions.
+
+
