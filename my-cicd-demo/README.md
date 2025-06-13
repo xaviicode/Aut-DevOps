@@ -248,8 +248,16 @@ Este README documenta, de forma clara y dinámica, cómo configurar un pipeline 
 
 1. Genera claves:
    ```
-   openssl genrsa -out server.key 2048
-   openssl req -new -x509 -key server.key -out server.crt -days 365
+openssl genrsa -out server.key 2048
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+
+Abre la terminal en la carpeta de tu proyecto (o en la carpeta donde deseas que se cree el archivo).
+
+Ejecuta el siguiente comando para crear un certificado autofirmado y su clave privada:
+
+Durante el proceso se te solicitarán algunos datos (país, organización, etc.). Estos datos se integrarán en el certificado.
+
+Una vez completado el comando, confirma que el archivo se generó ejecutando:
    ```
 2. Crea una Connected App en Salesforce:
    - Habilita OAuth y sube server.crt.
