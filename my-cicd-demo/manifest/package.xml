@@ -14,5 +14,6 @@
   </types>
   <version>59.0</version>
 </Package>
-// This file is used to define the metadata components that are included in the package.
-// The wildcard (*) is used to include all Apex classes, triggers, and custom objects in the package.
+// comment: This package.xml file is used to deploy all Apex classes, triggers, and custom objects in a Salesforce org. The wildcard (*) indicates that all components of the specified type should be included in the deployment. The version is set to 59.0, which corresponds to the API version of Salesforce at the time of writing. 
+// Note: Ensure that you have the necessary permissions and that the components are compatible with the target org before deploying.
+<!-- This file is part of a Salesforce deployment package. It specifies the components to be included in the deployment. -->
