@@ -142,19 +142,196 @@ Entra a la sección “Secrets” de tu repositorio en GitHub y agrega las varia
 Proyecto desarrollado por [Tu Nombre o Equipo].  
 Licencia MIT.
 
+
+---
 ---
 
-> [!NOTE]
-> Este README está pensado para ser dinámico y crecer con tu proyecto. Modifica y adapta las secciones según tus necesidades y las de tu equipo[2][3][1].
+```markdown
+# 🚀 Salesforce CI/CD Pipeline con GitHub Actions
+
+Este README documenta, de forma clara y dinámica, cómo configurar un pipeline de CI/CD para Salesforce usando Salesforce DX, Git y GitHub Actions. Incluye ejemplos, comandos y recomendaciones para que puedas replicar el proceso paso a paso.
+
+---
+
+
+1. Crear una Salesforce Developer Org de Prueba
+
+- Regístrate gratis en [developer.salesforce.com/signup](https://developer.salesforce.com/signup).
+- Usa un correo válido y elige un username único (formato email).
+- El perfil por defecto es System Administrator, ideal para pruebas y automatización.
+
+
+
+---
+
+
+2. Preparar el Proyecto Salesforce DX
+
+- Crea un nuevo proyecto Salesforce DX:
+  ```
+  sfdx force:project:create -n my-cicd-demo
+  cd my-cicd-demo
+  ```
+- Autentica tu org de prueba:
+  ```
+  sfdx auth:web:login -a devorg
+  ```
+- Recupera la metadata con un package.xml básico:
+  ```
+  sfdx force:source:retrieve -u devorg -x manifest/package.xml
+  ```
+- Ejemplo de package.xml:
+  ```
+  
+  
+    
+      *
+      ApexClass
+    
+    
+      *
+      ApexTrigger
+    
+    
+      *
+      CustomObject
+    
+    59.0
+  
+  ```
+
+
+
+---
+
+
+3. Versionar el Código con Git
+
+- Inicializa Git y haz el primer commit:
+  ```
+  git init
+  git add .
+  git commit -m "Primer commit: proyecto Salesforce DX inicial"
+  ```
+- Crea un repositorio en GitHub y enlázalo:
+  ```
+  git remote add origin 
+  git push -u origin main
+  ```
+
+
+
+---
+
+
+4. Estrategia de Ramas
+
+- main: rama principal, refleja el estado productivo.
+- feature/xxx: para nuevas funcionalidades o cambios.
+- Ejemplo de flujo:
+  ```
+  git checkout -b feature/mi-cambio
+  # ...haz cambios...
+  git add .
+  git commit -m "Agrego nueva funcionalidad"
+  git checkout main
+  git merge feature/mi-cambio
+  git push origin main
+  ```
+
+
+
+---
+
+
+5. Configurar Autenticación JWT para CI/CD
+
+1. Genera claves:
+   ```
+openssl genrsa -out server.key 2048
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+
+Abre la terminal en la carpeta de tu proyecto (o en la carpeta donde deseas que se cree el archivo).
+
+Ejecuta el siguiente comando para crear un certificado autofirmado y su clave privada:
+
+Durante el proceso se te solicitarán algunos datos (país, organización, etc.). Estos datos se integrarán en el certificado.
+
+Una vez completado el comando, confirma que el archivo se generó ejecutando:
+   ```
+2. Crea una Connected App en Salesforce:
+   - Habilita OAuth y sube server.crt.
+   - Agrega scopes: full y refresh_token, offline_access.
+   - Anota el Consumer Key (Client ID).
+3. Configura los secretos en GitHub:
+   - SF_CLIENT_ID: Consumer Key.
+   - SF_USERNAME: username de Salesforce.
+   - SF_JWT_KEY: contenido de server.key.
+   - SF_INSTANCE_URL: normalmente https://login.salesforce.com.
+
+
+
+---
+
+
+6. Pipeline CI/CD con GitHub Actions
+
+Crea el archivo .github/workflows/deploy.yml en tu repo:
+
+```
+name: Deploy to Salesforce Dev Org
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Salesforce CLI
+        uses: amtrack/sfdx-actions@v1
+
+      - name: Write server.key file
+        run: echo "${{ secrets.SF_JWT_KEY }}" > assets/server.key
+
+      - name: Authenticate to Salesforce (JWT)
+        run: |
+          sfdx auth:jwt:grant \
+            --clientid ${{ secrets.SF_CLIENT_ID }} \
+            --jwtkeyfile assets/server.key \
+            --username ${{ secrets.SF_USERNAME }} \
+            --instanceurl ${{ secrets.SF_INSTANCE_URL }} \
+            --setdefaultusername
+
+      - name: Deploy source to org (Check Only)
+        run: sfdx force:source:deploy -p force-app -u ${{ secrets.SF_USERNAME }} --checkonly
+
+      - name: Run Apex tests
+        run: sfdx force:apex:test:run -u ${{ secrets.SF_USERNAME }} --resultformat human --wait 10
 ```
 
-[1] https://www.bacancytechnology.com/blog/salesforce-ci-cd-integration
-[2] https://coderefinery.github.io/documentation/writing-readme-files/
-[3] https://hackernoon.com/cicd-best-practices-for-salesforce-dx
-[4] https://github.com/coalesceio/salesforce/blob/salesforce_dynamic_model/README.md
-[5] https://github.com/scolladon/sfdx-git-delta/blob/main/README.md
-[6] https://github.com/salto-io/salesforce-ci-cd-org-dev/blob/master/README.md
-[7] https://dev.to/rohit19060/how-to-write-stunning-github-readme-md-template-provided-5b09
-[8] https://abhisheksubbu.github.io/salesforce-azure-devops-with-github-source-control/
-[9] https://gearset.com/blog/salesforce-cicd-best-practices/
-[10] https://gearset.com/blog/cicd-for-salesforce-that-just-works-out-of-the-box/
+- El pipeline se ejecuta automáticamente al hacer push a main.
+- Modifica --checkonly si deseas hacer un despliegue real.
+
+
+
+---
+
+
+7. Buenas Prácticas y Recursos
+
+- Documenta cada paso en este README.
+- Usa ramas para cada feature.
+- Automatiza pruebas y validaciones antes de desplegar.
+- Consulta la guía oficial de Salesforce DX para CI/CD[3].
+- Explora ejemplos y plantillas en la comunidad Salesforce[1][2][7][8].
+
+
+
+---
+
+¿Dudas o sugerencias? ¡Abre un issue o contribuye con mejoras!
