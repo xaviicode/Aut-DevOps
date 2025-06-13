@@ -142,24 +142,6 @@ Entra a la sección “Secrets” de tu repositorio en GitHub y agrega las varia
 Proyecto desarrollado por [Tu Nombre o Equipo].  
 Licencia MIT.
 
----
-
-> [!NOTE]
-> Este README está pensado para ser dinámico y crecer con tu proyecto. Modifica y adapta las secciones según tus necesidades y las de tu equipo[2][3][1].
-```
-
-[1] https://www.bacancytechnology.com/blog/salesforce-ci-cd-integration
-[2] https://coderefinery.github.io/documentation/writing-readme-files/
-[3] https://hackernoon.com/cicd-best-practices-for-salesforce-dx
-[4] https://github.com/coalesceio/salesforce/blob/salesforce_dynamic_model/README.md
-[5] https://github.com/scolladon/sfdx-git-delta/blob/main/README.md
-[6] https://github.com/salto-io/salesforce-ci-cd-org-dev/blob/master/README.md
-[7] https://dev.to/rohit19060/how-to-write-stunning-github-readme-md-template-provided-5b09
-[8] https://abhisheksubbu.github.io/salesforce-azure-devops-with-github-source-control/
-[9] https://gearset.com/blog/salesforce-cicd-best-practices/
-[10] https://gearset.com/blog/cicd-for-salesforce-that-just-works-out-of-the-box/
-
-
 
 ---
 ---
@@ -345,23 +327,3 @@ jobs:
 ---
 
 ¿Dudas o sugerencias? ¡Abre un issue o contribuye con mejoras!
-```
-Este formato con pestañas desplegables (usando ``) hace el README muy claro, dinámico y fácil de navegar, siguiendo las mejores prácticas de documentación para proyectos Salesforce CI/CD[1][2][3][5][7][8].
-
-[1] https://gitlab.com/gitlab-org/project-templates/salesforcedx/-/blob/main/README.md
-[2] https://github.com/salto-io/salesforce-cicd-template
-[3] https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ci.htm
-[4] https://github.com/SalesforceSFDC/Salesforce-Documentation/blob/master/readme.md
-[5] https://www.minusculetechnologies.com/blogs/how-to-build-a-ci-cd-pipeline-for-salesforce
-[6] https://www.apexhours.com/ci-cd-pipeline-using-gitlab-for-salesforce/
-[7] https://github.com/iantendu/Salesforce-CI-CD-Template
-[8] https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ci_package_dev.htm
-[9] https://www.salesforceben.com/build-your-own-ci-cd-pipeline-in-salesforce-using-github-actions/
-[10] https://gitlab.com/sfdx/sfdx-cicd-template
-[11] https://github.com/salto-io/salesforce-cicd-template/blob/main/README.md
-[12] https://github.com/zoltan-nz/ci-cd-pipeline-template-for-data-projects/blob/master/README.md
-[13] https://sfdx-hardis.cloudity.com/salesforce-ci-cd-work-on-task-configuration/
-[14] https://trailhead.salesforce.com/content/learn/modules/b2c-build-processes-and-tests-for-technical-architects/b2c-automate-and-test-during-integration
-[15] https://sfdx-hardis.cloudity.com/salesforce-ci-cd-home/
-[16] https://trailhead.salesforce.com/pt-BR/content/learn/modules/b2c-build-processes-and-tests-for-technical-architects/b2c-automate-and-test-during-integration
-[17] https://trailhead.salesforce.com/content/learn/modules/salesforce-devops-with-copado/let-innovation-flow-with-continuous-delivery
