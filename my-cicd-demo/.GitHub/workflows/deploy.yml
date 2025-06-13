@@ -1,21 +1,33 @@
-name: Deply to Salesforce Dev Org
+name: Deploy to Salesforce Dev Org
+
 on:
   push:
-  branches:
-   -main
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-     - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-     - name: Set up Salesforce CLI
-       uses: amtrack/sfdx-action@v1
+      - name: Set up Salesforce CLI
+        uses: amtrack/sfdx-actions@v1
 
-     - name: Authenticate to Salesforce
-       run: sfdx auth:jwt:grant --clientid ${{ secrets.SF_CLIENT_ID}} --jwtkeyfile assets/server.key --username ${{ secrets.SF_USERNAME }} --setdefaultdevhubusername --instanceurl https://login.salesforce.com
+      - name: Write server.key file
+        run: echo "${{ secrets.SF_JWT_KEY }}" > assets/server.key
 
-     - name: Deploy source to org
-       run: sfdx force:source:deploy -p force-app -u ${{secrets.SF_USERNAME}} --checkonly
-       
+      - name: Authenticate to Salesforce (JWT)
+        run: |
+          sfdx auth:jwt:grant \
+            --clientid ${{ secrets.SF_CLIENT_ID }} \
+            --jwtkeyfile assets/server.key \
+            --username ${{ secrets.SF_USERNAME }} \
+            --instanceurl https://login.salesforce.com \
+            --setdefaultusername
+
+      - name: Deploy source to org (Check Only)
+        run: sfdx force:source:deploy -p force-app -u ${{ secrets.SF_USERNAME }} --checkonly
+
+      - name: Run Apex tests
+        run: sfdx force:apex:test:run -u ${{ secrets.SF_USERNAME }} --resultformat human --wait 10
