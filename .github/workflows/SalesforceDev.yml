@@ -32,11 +32,11 @@ jobs:
       - name: Run Apex tests
         run: sfdx force:apex:test:run -u ${{ secrets.SF_USERNAME }} --resultformat human --wait 10
 
-      - name: Commit and Push Changes
-        uses: stefanzweifel/gitauto-commit-acction@v5
-        with:
-          commit_message: Update Stats
-          commit_user_name: xaviicode
-          commit_user_email: xavilopez1612@gmail.com
-          commit_author: xaviicode
+      ## name: Commit and Push Changes
+        #uses: stefanzweifel/gitauto-commit-acction@v5
+        #with:
+          #commit_message: Update Stats
+          #commit_user_name: xaviicode
+          #commit_user_email: xavilopez1612@gmail.com
+          #commit_author: xaviicode
       
