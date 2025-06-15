@@ -11,6 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Salesforce CLI
+        run: npm install --global sfdx-cli
+
+
       - name: Set up Salesforce CLI
         uses: amtrack/sfdx-actions@v1
 
@@ -33,7 +37,7 @@ jobs:
         run: sfdx force:apex:test:run -u ${{ secrets.SF_USERNAME }} --resultformat human --wait 10
 
       - name: Commit and Push Changes
-        uses: stefanzweifel/gitauto-commit-acction@v5
+        uses: - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update Stats
           commit_user_name: xaviicode
