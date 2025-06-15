@@ -8,38 +8,36 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+   steps:
+  - name: Checkout
+    uses: actions/checkout@v3
 
-      - name: Install Salesforce CLI
-        run: npm install --global sfdx-cli
+  - name: Install Salesforce CLI
+    run: npm install --global sfdx-cli
 
-      - name: Set up Salesforce CLI
-        uses: amtrack/sfdx-actions@v1
+  - name: Write server.key file
+    run: echo "${{ secrets.SF_JWT_KEY }}" > assets/server.key
 
-      - name: Write server.key file
-        run: echo "${{ secrets.SF_JWT_KEY }}" > assets/server.key
+  - name: Authenticate to Salesforce (JWT)
+    run: |
+      sfdx auth:jwt:grant \
+        --clientid ${{ secrets.SF_CLIENT_ID }} \
+        --jwtkeyfile assets/server.key \
+        --username ${{ secrets.SF_USERNAME }} \
+        --instanceurl https://login.salesforce.com \
+        --setdefaultusername
 
-      - name: Authenticate to Salesforce (JWT)
-        run: |
-          sfdx auth:jwt:grant \
-            --clientid ${{ secrets.SF_CLIENT_ID }} \
-            --jwtkeyfile assets/server.key \
-            --username ${{ secrets.SF_USERNAME }} \
-            --instanceurl https://login.salesforce.com \
-            --setdefaultusername
+  - name: Deploy source to org (Check Only)
+    run: sfdx force:source:deploy -p force-app -u ${{ secrets.SF_USERNAME }} --checkonly
 
-      - name: Deploy source to org (Check Only)
-        run: sfdx force:source:deploy -p force-app -u ${{ secrets.SF_USERNAME }} --checkonly
+  - name: Run Apex tests
+    run: sfdx force:apex:test:run -u ${{ secrets.SF_USERNAME }} --resultformat human --wait 10
 
-      - name: Run Apex tests
-        run: sfdx force:apex:test:run -u ${{ secrets.SF_USERNAME }} --resultformat human --wait 10
+  - name: Commit and Push Changes
+    uses: stefanzweifel/git-auto-commit-action@v5
+    with:
+      commit_message: Update Stats
+      commit_user_name: xavicode
+      commit_user_email: xavilopez1612@gmail.com
+      commit_author: xavicode
 
-      - name: Commit and Push Changes
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Update Stats
-          commit_user_name: xaviicode
-          commit_user_email: xavilopez1612@gmail.com
-          commit_author: xaviicode
-      
