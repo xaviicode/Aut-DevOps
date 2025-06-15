@@ -14,7 +14,6 @@ jobs:
       - name: Install Salesforce CLI
         run: npm install --global sfdx-cli
 
-
       - name: Set up Salesforce CLI
         uses: amtrack/sfdx-actions@v1
 
