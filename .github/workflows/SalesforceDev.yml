@@ -13,8 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Salesforce CLI
-        run: npm install --global sfdx-cli
+      - name: Setup Salesforce CLI
+        uses: salesforce-actions/setup-sfdx@v1
+
+      # Si se necesitas Node.js, descomenta estas líneas
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 'la adecuda'
 
       - name: Write server.key file
         run: |
@@ -23,6 +29,7 @@ jobs:
 
       - name: Authenticate to Salesforce (JWT)
         run: |
+          set -e
           sfdx auth:jwt:grant \
             --clientid ${{ secrets.SF_CLIENT_ID }} \
             --jwtkeyfile assets/server.key \
@@ -30,12 +37,16 @@ jobs:
             --instanceurl ${{ secrets.SF_INSTANCE_URL }} \
             --setdefaultusername
 
+      - name: Remove server.key
+        run: rm -f assets/server.key
+
       - name: Deploy source to org (Check Only)
         run: sfdx force:source:deploy -p force-app -u ${{ secrets.SF_USERNAME }} --checkonly
 
       - name: Run Apex tests
         run: sfdx force:apex:test:run -u ${{ secrets.SF_USERNAME }} --resultformat human --wait 10
 
+      # Si necesitas commit automático, deja este paso:
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
@@ -43,7 +54,3 @@ jobs:
           commit_user_name: xavicode
           commit_user_email: xavilopez1612@gmail.com
           commit_author: xavicode
-
-          #
-
-
